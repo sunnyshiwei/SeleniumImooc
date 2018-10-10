@@ -34,34 +34,35 @@ public class Login {
 	}
 
 	public void LoginScript() throws InterruptedException{
-		String emailElement="email";
-		String passwordElement="password";
-		String xpathElement=".//*[@id='signup-form']/div[5]/input";
- 		String headerElement="header-avator";
- 		String nameElement="name";
+		
+		//String emailElement="email";
+		//String passwordElement="password";
+		//String xpathElement=".//*[@id='signup-form']/div[5]/input";
+ 		//String headerElement="header-avator";
+ 		//String nameElement="name";
  		
- 		String userName="13998538053";
+ 	    String userName="13998538053";
 		String passWord="1qaz2wsx";
- 		
+ 	
 		Thread.sleep(2000);
 		//定位输入框
-		WebElement user=driver.findElement(this.byString(nameStr, emailElement));
+		WebElement user=this.driverElement(this.byString("userName"));
 		user.isDisplayed();
-		WebElement password=driver.findElement(this.byString(nameStr, passwordElement));
+		WebElement password=this.driverElement(this.byString("passWord"));
 		user.isDisplayed();
-		WebElement loginButton=driver.findElement(this.byString(xpathStr, xpathElement));
+		WebElement loginButton=this.driverElement(this.byString("loginbutton"));
 		loginButton.isDisplayed();
 		user.sendKeys(userName);
 		password.sendKeys(passWord);
 		loginButton.click();		
 		Thread.sleep(3000);
-		WebElement userStatus=driver.findElement(this.byString(idStr, headerElement));
+		WebElement userStatus=this.driverElement(this.byString("userstatus"));
 		userStatus.isDisplayed();
 		//鼠标悬停
 		Actions action = new Actions(driver);		
 		action.moveToElement(userStatus).perform();;
 		Thread.sleep(2000);
-		String username=driver.findElement(this.byString(classNameStr, nameElement)).getText();
+		String username=this.driverElement(this.byString("username")).getText();
 		System.out.println(username);
 		
 		if(username.equals("微微要学自动化")){
@@ -75,31 +76,42 @@ public class Login {
 		Login login=new Login();
 		login.InitDriver();
 		login.LoginScript();
-		
+	
 	}
 	/*封装By by
 	 * 方法中byString(String by,String local) by为定位方式id,name,className等等
 	 * local为当前*/
-	 public By byString(String by,String local){
-		if(by.equals("id")){
-			return By.id(local);
-		}else if(by.equals("name")){
-			return By.name(local);	
-		}else if(by.equals("className")){
-			return By.className(local);
-		}else if(by.equals("cssSelector")){
-			return By.cssSelector(local);
-		}else if(by.equals("linkText")){
-			return By.linkText(local);
-		}else if(by.equals("partialLinkText")){
-			return By.partialLinkText(local);
-		}else if(by.equals("tagName")){
-			return By.tagName(local);
+	 public By byString(String key){
+		 
+		ProUtils properties= new ProUtils("element.properties");		
+		String locator=properties.getPro(key);
+		String locatorType=locator.split(">")[0];//定位方式是：element.properties文件中userName=name>email 的name
+		String locatorValue=locator.split(">")[1];//定位值是：element.properties文件中userName=name>email 的email
+		
+		if(locatorType.equals("id")){
+			return By.id(locatorValue);
+		}else if(locatorType.equals("name")){
+			return By.name(locatorValue);	
+		}else if(locatorType.equals("className")){
+			return By.className(locatorValue);
+		}else if(locatorType.equals("cssSelector")){
+			return By.cssSelector(locatorValue);
+		}else if(locatorType.equals("linkText")){
+			return By.linkText(locatorValue);
+		}else if(locatorType.equals("partialLinkText")){
+			return By.partialLinkText(locatorValue);
+		}else if(locatorType.equals("tagName")){
+			return By.tagName(locatorValue);
 		}else {
-			return By.xpath(local);
-		}
-			
+			return By.xpath(locatorValue);
+		}	
+	 }
+	 /*
+	  * 封装Element
+	  * **/
+	 public WebElement driverElement(By by){
+		 WebElement ele=driver.findElement(by);
+		 return ele;
 	 }
 	
-
 }
