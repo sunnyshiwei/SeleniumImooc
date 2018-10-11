@@ -1,5 +1,10 @@
 package SeleniumImooc.SeleniumImooc;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,16 +38,13 @@ public class Login {
 		driver.findElement(By.id("js-signin-btn")).click();
 	}
 
-	public void LoginScript() throws InterruptedException{
+	public void LoginScript(String userName,String passWord) throws InterruptedException{
 		
 		//String emailElement="email";
 		//String passwordElement="password";
 		//String xpathElement=".//*[@id='signup-form']/div[5]/input";
  		//String headerElement="header-avator";
  		//String nameElement="name";
- 		
- 	    String userName="13998538053";
-		String passWord="1qaz2wsx";
  	
 		Thread.sleep(2000);
 		//定位输入框
@@ -75,11 +77,24 @@ public class Login {
 	public static void main(String[] args) throws InterruptedException{
 		Login login=new Login();
 		login.InitDriver();
-		login.LoginScript();
+		login.LoginScript("13998538053","1qaz2wsx");
+		/*
+		 * Key-value
+		 * username-password
+		 * */
+		//初始化
+		HashMap<String, String> user = new HashMap<String, String>();
+		user.put("13998538053", "1qaz2wsx");
+		user.put("13998538053@163.com", "1qaz2wsx");
+		Iterator us =user.entrySet().iterator();
+		while(us.hasNext()){
+			Map.Entry entry=(Map.Entry) us.next();
+		}
+		
 	
 	}
 	/*封装By by
-	 * 方法中byString(String by,String local) by为定位方式id,name,className等等
+	 * 方法中byString(String key) by为定位方式id,name,className等等
 	 * local为当前*/
 	 public By byString(String key){
 		 
